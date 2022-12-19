@@ -169,12 +169,67 @@ def estado_inicial(tabuleiro):  # tabuleiro é uma string ex: “2_3541687”
 ########################################################################
 
 
-tabuleiro = input("digite o estado inicial do tabuleiro: ")
+# tabuleiro = input("digite o estado inicial do tabuleiro: ")
 
-if not(estado_inicial(tabuleiro)):
-    print("Entrada inválida")
+# if not(estado_inicial(tabuleiro)):
+#     print("Entrada inválida")
 
-else:
-    print("Entrada válida")
-    lista_teste = sucessor(tabuleiro)
-    print(lista_teste)
+# else:
+#     print("Entrada válida")
+#     lista_teste = sucessor(tabuleiro)
+#     print(lista_teste)
+
+
+#
+class Nodo:
+    """
+    Implemente a classe Nodo com os atributos descritos na funcao init
+    """
+    def __init__(self, estado, pai, acao, custo):
+        """
+        Inicializa o nodo com os atributos recebidos
+        :param estado:str, representacao do estado do 8-puzzle
+        :param pai:Nodo, referencia ao nodo pai, (None no caso do nó raiz)
+        :param acao:str, acao a partir do pai que leva a este nodo (None no caso do nó raiz)
+        :param custo:int, custo do caminho da raiz até este nó
+        """
+        self.estado = estado
+        self.pai = pai
+        self.acao = acao
+        self.custo = custo
+
+
+
+def expande(nodoValido):
+    a = 1
+    if not entrada_valida(nodoValido.estado):
+        raise 'Nodo com estado invalido'
+    if (nodoValido.acao == None and (nodoValido.pai != None or nodoValido.custo != 0)):
+        raise 'Nodo invalido: sem acao, mas com pai ou custo'        
+    if (nodoValido.pai == None and (nodoValido.acao != None or nodoValido.custo != 0)):
+        raise 'Nodo invalido: sem pai, mas com acao ou custo '        
+    if (nodoValido.custo == 0 and (nodoValido.pai != None or nodoValido.acao != None)) :
+        raise 'Nodo invalido: sem custo, mas com pai ou acao  '
+    
+    expancao = sucessor(nodoValido.estado)    
+    
+    lista = []
+    
+    for i in expancao:
+        lista.append(Nodo(i[1], nodoValido, i[0], nodoValido.custo + 1))
+    
+    return lista
+        
+nodo_teste = Nodo('2_3541687', None, None, 0)
+
+def printaNodo(nodoValido):
+    for i in nodoValido:
+        print('nodo: ', 1)
+        print('estado: ', i.estado)
+        print('pai: ', i.pai)
+        print('acao: ', i.acao)
+        print('custo: ', i.custo)
+        print("")
+        
+printaNodo(expande(nodo_teste))
+
