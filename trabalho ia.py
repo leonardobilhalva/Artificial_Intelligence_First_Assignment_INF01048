@@ -180,7 +180,8 @@ def estado_inicial(tabuleiro):  # tabuleiro é uma string ex: “2_3541687”
 #     print(lista_teste)
 
 
-#
+########################################################################
+#classe nodo
 class Nodo:
     """
     Implemente a classe Nodo com os atributos descritos na funcao init
@@ -198,7 +199,8 @@ class Nodo:
         self.acao = acao
         self.custo = custo
 
-
+########################################################################
+#funcao expande
 
 def expande(nodoValido):
     a = 1
@@ -219,9 +221,10 @@ def expande(nodoValido):
         lista.append(Nodo(i[1], nodoValido, i[0], nodoValido.custo + 1))
     
     return lista
-        
-nodo_teste = Nodo('2_3541687', None, None, 0)
 
+########################################################################
+#funcao pra printar nodos
+        
 def printaNodo(nodoValido):
     for i in nodoValido:
         print('nodo: ', 1)
@@ -230,6 +233,10 @@ def printaNodo(nodoValido):
         print('acao: ', i.acao)
         print('custo: ', i.custo)
         print("")
-        
-printaNodo(expande(nodo_teste))
+
+########################################################################
+#testes para funcao expande        
+
+#nodo_teste = Nodo('2_3541687', None, None, 0)        
+#printaNodo(expande(nodo_teste))
 
