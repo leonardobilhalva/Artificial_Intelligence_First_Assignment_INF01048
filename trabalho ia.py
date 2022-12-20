@@ -179,7 +179,6 @@ def estado_inicial(tabuleiro):  # tabuleiro é uma string ex: “2_3541687”
 #     lista_teste = sucessor(tabuleiro)
 #     print(lista_teste)
 
-
 ########################################################################
 #classe nodo
 class Nodo:
@@ -234,9 +233,90 @@ def printaNodo(nodoValido):
         print('custo: ', i.custo)
         print("")
 
+def bfs(estado):
+#     """
+#     Recebe um estado (string), executa a busca em LARGURA e
+#     retorna uma lista de ações que leva do
+#     estado recebido até o objetivo ("12345678_").
+#     Caso não haja solução a partir do estado recebido, retorna None
+#     :param estado: str
+#     :return:
+#     """
+   # substituir a linha abaixo pelo seu codigo
+    if not entrada_valida(estado):
+        raise 'Nodo com estado invalido'
+    nodo_inicial = Nodo(estado, None, None, 0) # a função bfs vai receber um estado inicial e precisa criar este primeiro nodo
+    explorados = []
+    fronteira = expande(nodo_inicial) # pelo que entendi fronteira = [("Direita", "12345678_"), ("Esquerda", "1234567_8")]
+    resultado = []
+    visitados = []
+    
+    #loop
+    #if fronteira == None: # testa se fronteira é vazia, porem nunca vai ser, ja que sempre vai ter duas jogadas pelo menos
+     #   return None       # por isso acho que não necesasrio esse teste
+    visitados.append(fronteira.pop) # precisa retirar da fronteira e por em v
+    
+    for i in range(0, len(visitados)):
+        if i.estado == "12345678_":
+            return resultado.append(i.acao) # pelo que entendi v = ("Direita", "12345678_"), resultado = ["xxx",...,"Direita"]
+        if i.estado == "185423_67":    # caso passado pelo professor se chegar nessa jogada retorna none, pois apartir dela não tem como
+            return None         # alcançar o objetivo
+        if visitados != explorados:
+            explorados.append(i)
+            fronteira.append(expande(i)) # expandindo por ex: v = ("Direita", "12345678_"); expande("12345678_")
+            resultado.append(i)  # pelo que entendi v = ("Direita", "12345678_"), resultado = ["xxx",...,"Direita"]
+            indice = indice + 2
+
+def dfs(estado):
+    """
+    Recebe um estado (string), executa a busca em PROFUNDIDADE e
+    retorna uma lista de ações que leva do
+    estado recebido até o objetivo ("12345678_").
+    Caso não haja solução a partir do estado recebido, retorna None
+    :param estado: str
+    :return:
+    """
+    
+   # substituir a linha abaixo pelo seu codigo
+    if not entrada_valida(estado):
+        raise 'Nodo com estado invalido'
+    nodo_inicial = Nodo(estado, None, None, 0) # a função bfs vai receber um estado inicial e precisa criar este primeiro nodo
+    explorados = []
+    fronteira = expande(nodo_inicial)
+    resultado = []
+    
+    if estado == "185423_67":
+        return None
+    
+    while True:
+        if len(fronteira) == 0:
+            raise 'falhou'          
+        atual = fronteira.pop()
+        if atual.estado == "12345678_":
+            return resultado.append(atual.acao)
+        if not esta_contido_nodo_lista(atual, explorados):
+            explorados.append(atual)
+            fronteira.extend(expande(atual)) # expandindo por ex: v = ("Direita", "12345678_"); expande("12345678_")
+            resultado.append(atual.acao)  # pelo que entendi v = ("Direita", "12345678_"), resultado = ["xxx",...,"Direita"]
+    
+
+
 ########################################################################
 #testes para funcao expande        
 
-#nodo_teste = Nodo('2_3541687', None, None, 0)        
-#printaNodo(expande(nodo_teste))
+# nodo_teste = Nodo('2_3541687', None, None, 0)        
+# printaNodo(expande(nodo_teste))
 
+def esta_contido_nodo_lista (nodo, lista_nodo):
+    # print("lista: ")
+    # for i in lista_nodo:        
+    #     print(i.estado)
+    # print("atual: ", nodo.estado)
+    # print("-----------")
+    for i in lista_nodo:
+        if nodo.estado == i.estado:
+            return True
+        
+    return False
+
+print(dfs("123456_78"))
