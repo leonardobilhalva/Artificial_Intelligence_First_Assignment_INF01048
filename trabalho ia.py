@@ -1,3 +1,5 @@
+import bisect 
+
 def cria_lista_tupla(estado, index):
     letra_aux = estado[index]
     # "*" necessario pois como ficaria dois caracter igual, ele acabava substituindo errado
@@ -202,7 +204,6 @@ class Nodo:
 #funcao expande
 
 def expande(nodoValido):
-    a = 1
     if not entrada_valida(nodoValido.estado):
         raise 'Nodo com estado invalido'
     if (nodoValido.acao == None and (nodoValido.pai != None or nodoValido.custo != 0)):
@@ -224,27 +225,23 @@ def expande(nodoValido):
 ########################################################################
 #funcao pra printar nodos
         
-def printaNodo(nodoValido):
-    for i in nodoValido:
-        print('nodo: ', 1)
-        print('estado: ', i.estado)
-        print('pai: ', i.pai)
-        print('acao: ', i.acao)
-        print('custo: ', i.custo)
-        print("")
-        
+def buscaBinaria(explorados, estado):
+    primeiro = 0
+    ultimo = len(explorados)-1
+    bingo = False
 
-def esta_contido_nodo_lista (nodo, lista_nodo):
-    # print("lista: ")
-    # for i in lista_nodo:        
-    #     print(i.estado)
-    # print("atual: ", nodo.estado)
-    # print("-----------")
-    for i in lista_nodo:
-        if nodo.estado == i.estado:
-            return True
-        
-    return False
+    while primeiro<=ultimo and not bingo:
+         meio = (primeiro + ultimo)//2
+         if explorados[meio] == estado:
+             bingo = True
+         else:
+             if estado < explorados[meio]:
+                 ultimo = meio-1
+             else:
+                 primeiro = meio+1
+
+    return bingo
+
 
 def bfs(estado):
     """
@@ -268,17 +265,17 @@ def bfs(estado):
         return None
 
     while True:
-        fila.reverse()
-        visitado = fila.pop()
+        visitado = fila.pop(0)        
+        if visitado.estado == "185423_67":
+            print("leonardo e foda")
         if visitado.estado == "12345678_":
             while visitado.pai != None:
                 caminho.append(visitado.acao)
                 visitado = visitado.pai
             caminho.reverse()
             return caminho
-        if not esta_contido_nodo_lista(visitado, explorados):
-            explorados.append(visitado)
-            fila.reverse()
+        if not buscaBinaria(explorados, visitado.estado):
+            bisect.insort(explorados, visitado.estado)
             fila.extend(expande(visitado))
             
             
@@ -304,7 +301,7 @@ def dfs(estado):
 
     if estado == '185423_67':    # caso passado pelo professor se chegar nessa jogada retorna none, pois apartir dela não tem como
         return None
-
+    
     while True:
         visitado = fila.pop()
         if visitado.estado == "12345678_":
@@ -313,8 +310,8 @@ def dfs(estado):
                 visitado = visitado.pai
             caminho.reverse()
             return caminho
-        if not esta_contido_nodo_lista(visitado, explorados):
-            explorados.append(visitado)
+        if not buscaBinaria(explorados, visitado.estado):
+            bisect.insort(explorados, visitado.estado)
             fila.extend(expande(visitado))
     
             
@@ -327,6 +324,7 @@ def dfs(estado):
 # nodo_teste = Nodo('2_3541687', None, None, 0)        
 # printaNodo(expande(nodo_teste))
 
-print(dfs("123456_78"))
+print(len(dfs("2_3541687")))
+
 
 # 12345_678

@@ -1,7 +1,7 @@
 import unittest
 import timer
 import solucao
-
+import bisect
 
 class TestaSolucao(unittest.TestCase):
     
