@@ -292,28 +292,31 @@ def dfs(estado):
     :param estado: str
     :return:
     """
-    
+        
    # substituir a linha abaixo pelo seu codigo
     if not entrada_valida(estado):
         raise 'Nodo com estado invalido'
     nodo_inicial = Nodo(estado, None, None, 0) # a função bfs vai receber um estado inicial e precisa criar este primeiro nodo
     explorados = []
-    fronteira = expande(nodo_inicial)
-    resultado = []
-    
-    if estado == "185423_67":
+    fila = expande(nodo_inicial) # pelo que entendi fila = [("Direita", "12345678"), ("Esquerda", "1234567_8")]
+    caminho = []
+    controlador = 0
+
+    if estado == '185423_67':    # caso passado pelo professor se chegar nessa jogada retorna none, pois apartir dela não tem como
         return None
-    
+
     while True:
-        if len(fronteira) == 0:
-            raise 'falhou'          
-        atual = fronteira.pop()
-        if atual.estado == "12345678_":
-            return resultado.append(atual.acao)
-        if not esta_contido_nodo_lista(atual, explorados):
-            explorados.append(atual)
-            fronteira.extend(expande(atual)) # expandindo por ex: v = ("Direita", "12345678_"); expande("12345678_")
-            resultado.append(atual.acao)  # pelo que entendi v = ("Direita", "12345678_"), resultado = ["xxx",...,"Direita"]
+        visitado = fila.pop()
+        if visitado.estado == "12345678_":
+            while visitado.pai != None:
+                caminho.append(visitado.acao)
+                visitado = visitado.pai
+            caminho.reverse()
+            return caminho
+        if not esta_contido_nodo_lista(visitado, explorados):
+            explorados.append(visitado)
+            fila.extend(expande(visitado))
+    
             
     
 
@@ -324,6 +327,6 @@ def dfs(estado):
 # nodo_teste = Nodo('2_3541687', None, None, 0)        
 # printaNodo(expande(nodo_teste))
 
-print(bfs("123456_78"))
+print(dfs("123456_78"))
 
 # 12345_678
