@@ -312,9 +312,63 @@ def dfs(estado):
             return caminho
         if not buscaBinaria(explorados, visitado.estado):
             bisect.insort(explorados, visitado.estado)
-            fila.extend(expande(visitado))
-    
+            fila.extend(expande(visitado))  
             
+
+def buscaBinariaHeuristica(explorados, estado): #busca binaria utilizando tuplas
+    primeiro = 0
+    ultimo = len(explorados)-1
+    bingo = False
+
+    while primeiro<=ultimo and not bingo:
+         meio = (primeiro + ultimo)//2
+         if explorados[meio][1] == estado[1]:
+             bingo = True
+         else:
+             if estado[1] < explorados[meio][1]:
+                 ultimo = meio-1
+             else:
+                 primeiro = meio+1
+
+    return bingo
+            
+
+def astar_hamming(estado):
+    """
+    Recebe um estado (string), executa a busca em PROFUNDIDADE e
+    retorna uma lista de ações que leva do
+    estado recebido até o objetivo ("12345678_").
+    Caso não haja solução a partir do estado recebido, retorna None
+    :param estado: str
+    :return:
+    """
+        
+   # substituir a linha abaixo pelo seu codigo
+    if not entrada_valida(estado):
+        raise 'Nodo com estado invalido'
+    nodo_inicial = Nodo(estado, None, None, 0) # a função bfs vai receber um estado inicial e precisa criar este primeiro nodo
+    explorados = []
+    fila = expande(nodo_inicial) # pelo que entendi fila = [("Direita", "12345678"), ("Esquerda", "1234567_8")]
+    caminho = []
+    controlador = 0
+
+    if estado == '185423_67':    # caso passado pelo professor se chegar nessa jogada retorna none, pois apartir dela não tem como
+        return None
+    
+    while True:
+        visitado = fila.pop(0)
+        if visitado.estado == "12345678_":
+            while visitado.pai != None:
+                caminho.append(visitado.acao)
+                visitado = visitado.pai
+            caminho.reverse()
+            return caminho
+        if not buscaBinaria(explorados, visitado.estado):
+            calculo = 1 #heuristica
+            bisect.insort(explorados, [visitado.estado, calculo]) #@todo calcular e inserir de acordo com o cálculo [estado, calculo]
+            fila.extend(expande(visitado))  
+        else:
+            #@todo verificar se o atual é menor e se sim atualizar
     
 
 
