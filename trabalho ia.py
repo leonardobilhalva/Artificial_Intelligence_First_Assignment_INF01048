@@ -265,9 +265,7 @@ def bfs(estado):
         return None
 
     while True:
-        visitado = fila.pop(0)        
-        if visitado.estado == "185423_67":
-            print("leonardo e foda")
+        visitado = fila.pop(0)    
         if visitado.estado == "12345678_":
             while visitado.pai != None:
                 caminho.append(visitado.acao)
